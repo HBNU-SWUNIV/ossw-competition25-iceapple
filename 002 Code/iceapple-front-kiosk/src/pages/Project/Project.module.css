@@ -1,0 +1,127 @@
+.container {
+    padding: 5.5vw 2vw 2vw 3vw;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.icon {
+    font-size: 3.5vw;
+    color: #424242;
+}
+
+.projectTitle {
+    color: #424242;
+    font-size: 2.5vw;
+    font-weight: 700;
+}
+
+
+.yearDropdownWrapper {
+    position: relative;
+    font-size: 1.3vw;
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.yearDropdownToggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3vw;
+    background: none;
+    border: none;
+    color: #000;
+}
+
+.yearDropdownMenu {
+    position: absolute;
+    top: 2vw;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    padding: 0.5vw 0;
+    z-index: 1000;
+    font-size: 1vw;
+}
+
+.yearDropdownMenu li {
+    padding: 0.5vw 1vw;
+    white-space: nowrap;
+}
+
+.yearDropdownMenu li:hover {
+    background-color: #f5f5f5;
+}
+
+
+.projectGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3vw;
+    justify-items: center;
+    overflow-y: auto;
+    padding-top: 5vw;
+}
+
+.projectGrid::-webkit-scrollbar {
+    width: 0.5vw;
+}
+.projectGrid::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.projectCard {
+    background-color: rgba(243, 218, 201, 0.7);
+    border-radius: 12px;
+    overflow: hidden;
+    width: 15vw;
+    height: 13vw;
+}
+
+.projectImagePlaceholder {
+    width: 100%;
+    height: 9vw;
+    background-color: #FFFFFF;
+    opacity: 0.8;
+}
+
+.projectInfo {
+    padding: 0 0.5vw;
+}
+
+.projectName {
+    text-align: left;
+    font-size: 0.8vw;
+    font-weight: 600;
+    color: #333;
+    margin: 0.5vw 0 0 0;
+}
+
+.projectAuthors {
+    text-align: right;
+    font-size: 0.65vw;
+    color: #777;
+}
+
+.projectImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}

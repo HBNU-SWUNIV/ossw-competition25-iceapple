@@ -1,0 +1,277 @@
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 115%;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    padding: 2vw 2.6vw;
+    width: 22vw;
+    height: 25vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.content {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #4399B5;
+}
+
+.logo {
+    width: 9vw;
+    margin: 1.8vw 0;
+}
+
+/*예약 정보 - 예약*/
+.reservationInfo {
+    margin-top: 1vw;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7vw;
+    font-size: 1vw;
+}
+
+.dateColumn {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.timeColumn {
+    display: flex;
+    flex-direction: column;
+    font-weight: 400;
+}
+
+.roomColumn {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.seatCountStepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2rem;
+    padding: 0 0.6vw;
+}
+
+.seatCountStepper label {
+    color: #333;
+    margin: 0;
+}
+
+.stepperControl {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stepperControl span {
+    min-width: 3rem;
+    text-align: center;
+}
+
+.stepperControl button {
+    background-color: #FFFFFF;
+    color: #4399B5;
+    border: 1px solid #4399B5;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stepperControl button:disabled {
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+    box-shadow: none;
+}
+
+
+/*예약 정보 - 확정,취소 확인용*/
+.confirmationBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
+    min-height: 0;
+}
+
+.cancelList {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 0.4vw;
+}
+
+
+.confirmationId {
+    font-weight: 600;
+    margin-bottom: 0.5vw;
+    font-size: 1.1vw;
+}
+
+.confirmationDetails {
+    font-weight: 500;
+    margin-bottom: 1vw;
+    line-height: 1.6;
+    font-size: 0.9vw;
+}
+
+.confirmationSuccess {
+    color: #4399B5;
+    font-weight: bold;
+    font-size: 1.3vw;
+}
+
+
+/*예약 정보 - 예약 확인용*/
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1vw;
+    height: 1vw;
+    border: 2px solid #4399B5;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.25vw;
+}
+
+.checkbox:checked::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5vw;
+    height: 0.5vw;
+    border-radius: 50%;
+    background-color: #4399B5;
+}
+
+.numpadWrap {
+    position: absolute;
+    top: 20%;
+    left: 100%;
+    margin-left: 12px;
+    z-index: 1100;
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vw;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.reservationList {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 0.4vw;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    width: 100%;
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #4399B5;
+    border-radius: 2rem;
+    font-size: 2rem;
+    outline: none;
+    box-sizing: border-box;
+}
+.input:focus {
+    border-color: #2e86a6;
+    box-shadow: 0 0 0 3px rgba(67, 153, 181, 0.25);
+    background-color: #f9fdff;
+}
+
+/* 선택된 입력창 */
+.inputActive {
+    border-color: #2e86a6;
+    box-shadow: 0 0 0 3px rgba(67, 153, 181, 0.25);
+    background-color: #f9fdff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+
+/*버튼*/
+.buttonSection {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.submitBtn {
+    width: 100%;
+    background-color: #4399B5;
+    color: white;
+    padding: 0.5vw 2vw;
+    border: none;
+    border-radius: 2rem;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-top: 0.5vw;
+}
+
+.errorText {
+    color: red;
+    font-size: 0.9rem;
+    align-items: center;
+}

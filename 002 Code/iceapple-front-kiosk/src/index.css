@@ -1,0 +1,108 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #EEF7FA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "pretendard", sans-serif;
+}
+
+/* 캘린더 전체 스타일 */
+.react-calendar {
+  font-family: "pretendard", sans-serif !important;
+  width: auto;
+  border: none !important;
+  transform: scale(2.3);
+  transform-origin: top left;
+}
+
+/* 네비게이션 (월 표시, 버튼) */
+.react-calendar__navigation {
+  justify-content: center;
+}
+
+.react-calendar__navigation button {
+  font-size: 1.5rem;
+}
+
+.react-calendar__navigation__label {
+  font-weight: 800;
+  font-size: 1.2rem !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.react-calendar__tile {
+  height: 3.2rem;
+  font-size: 1.1rem;
+  border: none;
+}
+
+.react-calendar__tile--active {
+    background: #d6b59fb2 !important;
+    border-radius: 0;
+    color: #000;
+}
+
+.react-calendar__tile--now {
+    background: transparent !important;
+    color: black;
+
+}
+
+.react-calendar__month-view__weekdays abbr {
+    text-decoration: none !important;
+    border-bottom: none !important;
+}
+
+.today-tile {
+    color: #4378b5 !important;
+    font-weight: 700;
+    position: relative;
+}
+
+.today-label {
+    font-size: 0.6rem;
+    font-weight: 300;
+    color: #4378b5;
+    margin-top: 2px;
+}
+
+
+.react-calendar__tile--now.react-calendar__tile--active {
+    background: #d6b59fb2 !important;
+    border-radius: 0;
+}
+
+
+html, body {
+    height: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: pan-y;
+}
+
+
+img, video, a, svg, canvas {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: auto;
+}
+
+input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-drag: auto;
+    user-drag: auto;
+}

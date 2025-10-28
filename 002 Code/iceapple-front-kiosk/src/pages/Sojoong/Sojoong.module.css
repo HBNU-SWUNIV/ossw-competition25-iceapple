@@ -1,0 +1,146 @@
+.sojoong-container {
+    padding: 5.5vw 2vw 2vw 3vw;
+    font-family: "pretendard", sans-serif;
+}
+
+.sojoong-header {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    margin-bottom: 2vw;
+}
+
+.sojoong-header-icon {
+    font-size: 3.5vw;
+    color: #424242;
+}
+
+.sojoong-header-title {
+    color: #424242;
+    font-size: 2.5vw;
+    font-weight: 700;
+}
+
+.sojoong-content {
+    background-color: #fbeee7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 58.4167vw;
+    height: 3.5417vw;
+    margin-top: 1.0vw;
+    padding: 0 0 0 1vw;
+    border-radius: 1.3889vw;
+}
+
+.pinned-title {
+    font-weight: 700;
+}
+
+.sojoong-content-id {
+    font-weight: 700;
+    margin-right: 1vw;
+    width: 3vw;
+    text-align: center;
+    font-size: 0.7vw;
+}
+
+.sojoong-pin-icon {
+    width: 1.2153vw;
+    height: 1.2153vw;
+    margin-right: 1.9vw;
+    margin-left: 0.8vw;
+}
+
+.sojoong-content-title {
+    margin-top: 0.5vw;
+    flex-grow: 1;
+    font-size: 1.2vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sojoong-content-created-at {
+    min-width: 6vw;
+    text-align: right;
+}
+
+.sojoong-slide-group {
+    margin-bottom: 5vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.sojoong-swiper {
+    width: 100%;
+}
+
+.sojoong-swiper-frame {
+    position: relative;
+    width: 100%;
+}
+
+.sojoong-swiper {
+    width: 100%;
+    padding-bottom: 0vw;
+}
+
+.navArrow {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 3.2vw;
+    height: 3.2vw;
+    min-width: 38px;
+    min-height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    background: #dcb6a5;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}
+
+.navArrow:hover,
+.navArrow:focus-visible {
+    outline: none;
+    transform: translateY(-50%) scale(1.05);
+    opacity: 1;
+    background: rgba(66, 66, 66, 1);
+}
+
+.navLeft { left: 2.5vw; }
+.navRight { right: 2.5vw; }
+
+.navArrow :global(svg) {
+    width: 1.4vw;
+    height: 1.4vw;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+:global(.swiper-pagination-bullet) {
+    width: 0.7vw;
+    height: 0.7vw;
+    background: #4399B5;
+    /*background: #dcb6a5;*/
+    opacity: 0.5;
+    margin: 0 0.9vw !important;
+}
+
+:global(.swiper-pagination-bullet-active) {
+    background: #2e86a6;
+    /*background: #dcb6a5;*/
+    opacity: 1;
+    transform: scale(1.3);
+}

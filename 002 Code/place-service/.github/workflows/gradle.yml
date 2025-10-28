@@ -1,0 +1,212 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      - name: Build (bootJar)
+        run: ./gradlew clean bootJar
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: build/libs/*.jar
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: JAR 아티팩트 다운로드
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: dist
+
+      - name: 최신 JAR 선택
+        id: pick
+        shell: bash
+        run: |
+          set -e
+          FILE=$(ls -t dist/*.jar | head -n 1)
+          echo "jar_file=$FILE" >> "$GITHUB_OUTPUT"
+          echo "Picked: $FILE"
+
+      - name: SSH 클라이언트 설치 및 점검
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y openssh-client
+          ssh -V || true
+
+      - name: SSH 디렉터리 권한 정리
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+      - name: SSH 구성 준비 (ProxyJump)
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          umask 077
+
+          cat > ~/.ssh/wisoft-auth <<'EOF'
+          ${{ secrets.BASTION_KEY }}
+          EOF
+          sed -i 's/\r$//' ~/.ssh/wisoft-auth
+          chmod 600 ~/.ssh/wisoft-auth
+
+          cat > ~/.ssh/config <<'EOF'
+          Host bastion
+            HostName ${{ secrets.BASTION_HOST }}
+            Port ${{ secrets.BASTION_PORT }}
+            User ${{ secrets.BASTION_USER }}
+            IdentityFile ~/.ssh/wisoft-auth
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+
+          Host iceapple
+            HostName ${{ secrets.SSH_TARGET_HOST }}
+            User ${{ secrets.SSH_TARGET_USER }}
+            IdentityFile ~/.ssh/wisoft-auth
+            ProxyJump bastion
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+          EOF
+
+      - name: ProxyJump 연결 테스트
+        run: ssh iceapple "echo '[OK] 타깃 서버 연결 성공'"
+
+      - name: 릴리즈 디렉토리 보장
+        run: ssh iceapple "mkdir -p /home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/releases"
+
+      - name: JAR 파일 복사
+        run: scp "${{ steps.pick.outputs.jar_file }}" iceapple:/home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/releases/
+
+      - name: 설정 파일 안전 생성 및 전송 (application.properties, application-db.properties)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 1) 런너 임시 디렉토리 생성
+          TMPDIR="$(mktemp -d)"
+          trap 'rm -rf "$TMPDIR"' EXIT
+
+          # 2) secrets 내용을 로컬 파일로 생성 (줄바꿈 포함)
+          printf '%s\n' "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > "$TMPDIR/application.properties"
+          printf '%s\n' "${{ secrets.APPLICATION_DB_PROD_PROPERTIES }}" > "$TMPDIR/application-db.properties"
+
+          # 3) 서버의 shared 디렉토리 보장
+          ssh iceapple "mkdir -p /home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/shared"
+
+          # 4) 파일 전송 (덮어쓰기)
+          scp -q "$TMPDIR/application.properties"     iceapple:/home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/shared/application.properties
+          scp -q "$TMPDIR/application-db.properties"  iceapple:/home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/shared/application-db.properties
+
+          # 5) 서버에서 권한 보정
+          ssh iceapple "chmod 644 /home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/shared/application.properties \
+                         /home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service/shared/application-db.properties || true"
+
+          echo '[INFO] 설정 파일 안전 전송 완료'
+          
+
+      - name: 원격 배포(프로세스 종료 → nohup 실행 → 로그)
+        run: |
+          ssh iceapple 'bash -lc "
+            set -Eeuo pipefail
+            if [ -f \"\$HOME/.asdf/asdf.sh\" ]; then
+              . \"\$HOME/.asdf/asdf.sh\"
+            fi
+            export PATH=\$HOME/.asdf/shims:\$HOME/.asdf/bin:\$PATH
+
+            APP_DIR=\"/home/${{ secrets.SSH_TARGET_USER }}/iceapple/apps/place-service\"
+            RELEASES=\"\$APP_DIR/releases\"
+            SHARED=\"\$APP_DIR/shared\"
+            LOGS=\"\$APP_DIR/logs\"
+            PIDS=\"\$APP_DIR/pids\"
+            LOG_FILE=\"\$LOGS/place-service.log\"
+            PID_FILE=\"\$PIDS/app.pid\"
+
+            mkdir -p \"\$RELEASES\" \"\$SHARED\" \"\$LOGS\" \"\$PIDS\"
+            touch \"\$LOG_FILE\" && chmod 664 \"\$LOG_FILE\"
+
+            JAR_ON_SERVER=\$(ls -t \"\$RELEASES\"/*.jar | head -n 1 || true)
+            if [ -z \"\$JAR_ON_SERVER\" ]; then
+              echo \"releases 디렉토리에 JAR가 없습니다\"; exit 1
+            fi
+            JAR_BASENAME=\$(basename \"\$JAR_ON_SERVER\")
+            echo \"Using JAR: \$JAR_ON_SERVER\"
+
+            if [ -f \"\$PID_FILE\" ]; then
+              OLD_PID=\$(cat \"\$PID_FILE\" || true)
+              if [ -n \"\$OLD_PID\" ] && ps -p \"\$OLD_PID\" >/dev/null 2>&1; then
+                kill \"\$OLD_PID\" || true
+                sleep 3
+                ps -p \"\$OLD_PID\" >/dev/null 2>&1 && kill -9 \"\$OLD_PID\" || true
+              fi
+              rm -f \"\$PID_FILE\"
+            fi
+
+            RUNNING=\$(pgrep -f \"java .*\\\$JAR_BASENAME\" || true)
+            if [ -n \"\$RUNNING\" ]; then
+              kill \$RUNNING || true
+              sleep 3
+              RUNNING2=\$(pgrep -f \"java .*\\\$JAR_BASENAME\" || true)
+              [ -n \"\$RUNNING2\" ] && kill -9 \$RUNNING2 || true
+            fi
+
+            echo \" 애플리케이션 시작...\"
+            nohup java -jar \"\$JAR_ON_SERVER\" \
+              --spring.config.location=\"\$SHARED/application.properties,\$SHARED/application-db.properties\" \
+              >> \"\$LOG_FILE\" 2>&1 &
+
+            NEW_PID=\$!
+            sleep 3
+
+            if [ -n \"\$NEW_PID\" ] && ps -p \"\$NEW_PID\" >/dev/null 2>&1; then
+              echo \"\$NEW_PID\" > \"\$PID_FILE\"
+              echo \"시작 성공 (PID: \$NEW_PID)\"
+              tail -n 50 \"\$LOG_FILE\" || true
+            else
+              echo \"시작 실패\"
+              tail -n 100 \"\$LOG_FILE\" || true
+              exit 1
+            fi
+          "'
+
+  dependency-submission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0

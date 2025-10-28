@@ -1,0 +1,86 @@
+.footer {
+    background-color: #4399b5b2;
+    border-radius: 10px;
+    height: 12vh;
+    width: 97vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2vw;
+    box-sizing: border-box;
+    color: white;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.notice-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-megaphone {
+    width: 2.5vw;
+    height: 2.5vw;
+    padding-right: 0.5vw;
+}
+
+.notice-label {
+    font-size: 1.5vw;
+    font-weight: 600;
+    padding-right: 0.5vw;
+}
+
+.footer-pin-body {
+    margin-top: 0.6vh;
+    font-size: 1.2vw;
+    white-space: nowrap;
+}
+
+.footer-right {
+    display: flex;
+    align-items: flex-end;
+    gap: 40px;
+}
+
+.datetime {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.footer-date {
+    font-size: 1.4vw;
+    font-weight: 600;
+}
+
+.footer-time {
+    font-size: 1.3vw;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-kerning: none;
+}
+
+.weather {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.weather-temp {
+    font-size: 1.4vw;
+    font-weight: 600;
+    margin-right: 0.3vw;
+}
+
+.weather-desc {
+    font-size: 1.3vw;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.weather-icon {
+    width: 1.3vw;
+    height: 1.3vw;
+}

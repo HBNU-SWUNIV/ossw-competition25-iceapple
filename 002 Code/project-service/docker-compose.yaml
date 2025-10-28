@@ -1,0 +1,12 @@
+services:
+  iceapple:
+    container_name: iceapple_dev_database
+    image: postgres:17.5
+    restart: always
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - ${DB_PORT}:5432
+    env_file:
+      - .env.database

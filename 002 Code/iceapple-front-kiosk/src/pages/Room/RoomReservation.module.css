@@ -1,0 +1,133 @@
+.layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin: 0 4vw 0 4vw;
+}
+.buttonGroup {
+    display: grid;
+    grid-template-columns: 1vw 20vw 1vw;
+    align-items: center;
+}
+
+.roomWindow {
+    display: flex;
+    justify-content: center;
+    gap: 0.4vw;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.arrowBtn {
+    background: transparent;
+    border: none;
+    font-size: 1vw;
+    font-weight: 700;
+    width: auto;
+    height: auto;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #333;
+}
+
+.arrowBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+
+.Button {
+    height: 2.6vw;
+    width: 5.5vw;
+    background-color: #f3dac9b2;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9vw;
+    font-weight: 600;
+    color: #333333;
+}
+
+.Button:disabled {
+    background-color: #d6b59fb2;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.activeButton {
+    background-color: #d6b59fb2;
+}
+
+.leftColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    margin-top: 2vw;
+}
+
+
+.tableWrapper {
+    margin-top: 2vw;
+    flex: 1;
+    max-width: 18vw;
+}
+
+.tableWrapper table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableWrapper th,
+.tableWrapper td {
+    word-break: break-word;
+    text-align: center;
+}
+
+.scaledTableWrapper {
+    transform: scale(2.12);
+    transform-origin: top right;
+}
+
+.customHeader th {
+    background-color: #EACDB7 !important;
+    cursor: not-allowed;
+}
+
+.timeRow td {
+    background-color: rgba(248, 239, 233, 0.5) !important;
+}
+
+.timeRow {
+    background-color: rgba(248, 239, 233, 0.5);
+}
+
+.pastTimeRow {
+    background-color: #d2d2d2 !important;
+    color: #555555 !important;
+}
+
+.timeRow.pastTimeRow td,
+.timeRow.pastTimeRow td span,
+.timeRow.pastTimeRow td label {
+    color: #888 !important;
+    font-weight: normal !important;
+}
+
+.pastTimeRow:hover {
+    background-color: #f7f7f7 !important;
+}
+
+.pastTimeRow .form-check-input {
+    opacity: 0.6;
+}
+
+.reservationButton {
+    text-align: center;
+    margin-top: 15vw;
+    position: relative;
+    margin-left: -20vw;
+}
+
+

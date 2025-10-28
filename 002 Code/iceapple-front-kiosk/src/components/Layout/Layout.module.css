@@ -1,0 +1,25 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*height: 100vh;*/
+    gap: 1vw;
+}
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+}
+
+.main {
+    background-color: #FFFFFF;
+    width: 80vw;
+    height: 83vh;
+    border-radius: 9px;
+    overflow: hidden;
+
+}
